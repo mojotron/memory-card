@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
 html {
   box-sizing: border-box;
   font-size: 10px;
-  font-family: monospace;
+  font-family: "Concert One", monospace;
   font-weight: 400;
 }
 :root {
+  --gray: gray;
 }
 *,
 *::before,
