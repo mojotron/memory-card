@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./styles/App.css";
 import HeroCard from "./components/HeroCard";
+import { getRandomDataObjects, shuffleObjects } from "./helpers";
 
 class App extends Component {
   constructor(props) {
@@ -8,6 +9,7 @@ class App extends Component {
     this.state = {
       data: [],
       dataLoaded: false,
+      gameCards: [],
     };
   }
 
@@ -17,7 +19,6 @@ class App extends Component {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         const heros = data
           // .filter((ele) => ele.biography.publisher === "Marvel Comics")
           .map((ele) => ({
@@ -30,9 +31,8 @@ class App extends Component {
   }
 
   createHeroElements() {
-    return this.state.data.map((hero) => (
-      <HeroCard key={hero.id} data={hero} />
-    ));
+    const cards = getRandomDataObjects(6, this.state.data);
+    return cards.map((hero) => <HeroCard key={hero.id} data={hero} />);
   }
 
   render() {
