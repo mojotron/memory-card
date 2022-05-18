@@ -29,3 +29,6 @@
 .HeroCard:hover {
   transform: scale(1.1);
 }
+.HeroCard:active {
+  opacity: 0.5;
+}

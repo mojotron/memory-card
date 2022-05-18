@@ -8,6 +8,7 @@ function HeroCard(props) {
         className="HeroCard__image"
         src={props.data.image}
         alt={props.data.name}
+        onClick={props.handleClick}
       />
       <h2 className="HeroCard__name">{props.data.name}</h2>
     </div>

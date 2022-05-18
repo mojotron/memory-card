@@ -1,0 +1,9 @@
+.GameBoard {
+  border: 1px solid black;
+  display: grid;
+  width: 50rem;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}

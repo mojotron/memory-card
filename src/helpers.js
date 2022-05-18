@@ -14,22 +14,11 @@ function getRandomDataObjects(length, dataArr) {
   });
 }
 
-function shuffleObjects(...objects) {
-  const copy = [...objects].map((ele) => ({ ...ele }));
-  return Array.from({ length: objects.length }, () => {
+function shuffleObjects(objectsArr) {
+  const copy = objectsArr.map((ele) => ({ ...ele }));
+  return Array.from({ length: objectsArr.length }, () => {
     return copy.splice(getRandomIndex(copy.length), 1).pop();
   });
 }
-
-const temp = [
-  { a: 1 },
-  { a: 2 },
-  { a: 3 },
-  { a: 4 },
-  { a: 5 },
-  { a: 6 },
-  { a: 7 },
-  { a: 8 },
-];
 
 export { getRandomDataObjects, shuffleObjects };

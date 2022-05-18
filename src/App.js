@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./styles/App.css";
-import HeroCard from "./components/HeroCard";
-import { getRandomDataObjects, shuffleObjects } from "./helpers";
+import GameBoard from "./components/GameBoard";
+import { getRandomDataObjects } from "./helpers";
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class App extends Component {
       dataLoaded: false,
       gameCards: [],
     };
+    this.handleNewGame = this.handleNewGame.bind(this);
   }
 
   componentDidMount() {
@@ -19,26 +20,34 @@ class App extends Component {
     )
       .then((res) => res.json())
       .then((data) => {
-        const heros = data
-          // .filter((ele) => ele.biography.publisher === "Marvel Comics")
-          .map((ele) => ({
-            id: ele.id,
-            name: ele.name,
-            image: ele.images.sm,
-          }));
-        this.setState({ data: heros, dataLoaded: true });
+        const heros = data.map((ele) => ({
+          id: ele.id,
+          name: ele.name,
+          image: ele.images.sm,
+        }));
+        this.setState({
+          data: heros,
+          dataLoaded: true,
+          gameCards: getRandomDataObjects(4, heros),
+        });
       });
   }
 
-  createHeroElements() {
-    const cards = getRandomDataObjects(6, this.state.data);
-    return cards.map((hero) => <HeroCard key={hero.id} data={hero} />);
+  handleNewGame() {
+    console.log("yo");
+    this.setState({ gameCards: getRandomDataObjects(4, this.state.data) });
   }
 
   render() {
+    console.log(this.state.gameCards);
     return (
       <div className="App">
-        {this.state.dataLoaded && this.createHeroElements()}
+        {this.state.dataLoaded && (
+          <GameBoard
+            data={this.state.gameCards}
+            handleNewGame={this.handleNewGame}
+          />
+        )}
       </div>
     );
   }
