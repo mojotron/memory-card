@@ -9,6 +9,7 @@ function HeroCard(props) {
         src={props.data.image}
         alt={props.data.name}
         onClick={props.handleClick}
+        data-id={props.data.id}
       />
       <h2 className="HeroCard__name">{props.data.name}</h2>
     </div>
