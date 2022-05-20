@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./styles/App.css";
 import GameBoard from "./components/GameBoard";
+import Header from "./components/Header";
 import { getRandomDataObjects, shuffleObjects } from "./helpers";
 import LoadingSpinner from "./components/LoadingSninner";
 
@@ -14,12 +15,14 @@ class App extends Component {
       gameCards: [],
       currentRoundGuesses: [],
       gameRunning: false,
+      currentScore: 0,
+      highScore: 0,
     };
     this.handleNewGame = this.handleNewGame.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
   }
 
-  getRandomCards(level = 1) {
+  getRandomCards(level = 5) {
     return getRandomDataObjects(level * 4, this.state.data);
   }
 
@@ -29,6 +32,7 @@ class App extends Component {
       gameCards: this.getRandomCards(),
       currentRoundGuesses: [],
       gameRunning: true,
+      currentScore: 0,
     }));
   }
 
@@ -39,19 +43,24 @@ class App extends Component {
     if (this.state.currentRoundGuesses.includes(cardId)) {
       this.setState((state) => ({
         gameRunning: false,
+        highScore:
+          state.currentScore > state.highScore
+            ? state.currentScore
+            : state.highScore,
       }));
+      return;
     }
 
     if (
       this.state.currentRoundGuesses.length + 1 ===
       this.state.gameCards.length
     ) {
-      alert("YOU WON");
       this.setState((state) => ({
         round: state.round + 1,
         gameCards: this.getRandomCards(state.round + 1),
         currentRoundGuesses: [],
         gameRunning: true,
+        currentScore: state.currentScore + 1,
       }));
       return;
     }
@@ -59,6 +68,7 @@ class App extends Component {
     this.setState((state) => ({
       gameCards: shuffleObjects(state.gameCards),
       currentRoundGuesses: [...state.currentRoundGuesses, cardId],
+      currentScore: state.currentScore + 1,
     }));
   }
 
@@ -84,6 +94,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Header
+          currentScore={this.state.currentScore}
+          highScore={this.state.highScore}
+        />
         {!this.state.dataLoaded && <LoadingSpinner />}
         {this.state.dataLoaded && !this.state.gameRunning && (
           <button onClick={this.handleNewGame}>Start New Game</button>
@@ -94,6 +108,16 @@ class App extends Component {
             handleCardClick={this.handleCardClick}
           />
         )}
+        <footer
+          className={
+            this.state.gameRunning ? "foot--relative" : "foot--absolute"
+          }
+        >
+          <p>
+            created by{" "}
+            <a href="https://github.com/mojotron/memory-card">@mojotron</a>
+          </p>
+        </footer>
       </div>
     );
   }

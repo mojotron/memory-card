@@ -1,9 +1,7 @@
 .GameBoard {
-  border: 1px solid black;
+  margin-top: 1rem;
   display: grid;
-  width: 50rem;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  padding: 1rem;
 }

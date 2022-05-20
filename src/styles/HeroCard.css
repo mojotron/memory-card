@@ -28,7 +28,15 @@
 }
 .HeroCard:hover {
   transform: scale(1.1);
+  box-shadow: 3px 1px 20px var(--orange);
 }
 .HeroCard:active {
   opacity: 0.5;
+}
+@media (max-width: 400px) {
+  .HeroCard {
+    text-transform: uppercase;
+    height: 12.6rem;
+    width: 7rem;
+  }
 }
