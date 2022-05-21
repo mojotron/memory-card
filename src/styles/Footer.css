@@ -1,0 +1,15 @@
+.Footer {
+  color: var(--orange);
+  position: absolute;
+  bottom: 3rem;
+}
+.Footer__info {
+  font-size: 1.7rem;
+}
+.Footer__info__link,
+.Footer__info__link:visited {
+  color: var(--orange-light);
+}
+.Footer__info__link:hover {
+  color: var(--orange);
+}

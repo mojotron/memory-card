@@ -3,7 +3,8 @@ import "./styles/App.css";
 import GameBoard from "./components/GameBoard";
 import Header from "./components/Header";
 import { getRandomDataObjects, shuffleObjects } from "./helpers";
-import LoadingSpinner from "./components/LoadingSninner";
+import LoadingSpinner from "./components/LoadingSpinner";
+import Footer from "./components/Footer";
 
 class App extends Component {
   constructor(props) {
@@ -16,13 +17,13 @@ class App extends Component {
       currentRoundGuesses: [],
       gameRunning: false,
       currentScore: 0,
-      highScore: 0,
+      highScore: localStorage.getItem("memory-card-score") || 0,
     };
     this.handleNewGame = this.handleNewGame.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
   }
 
-  getRandomCards(level = 5) {
+  getRandomCards(level = 1) {
     return getRandomDataObjects(level * 4, this.state.data);
   }
 
@@ -37,7 +38,6 @@ class App extends Component {
   }
 
   handleCardClick(event) {
-    console.log(this.state);
     const cardId = event.target.dataset.id;
 
     if (this.state.currentRoundGuesses.includes(cardId)) {
@@ -88,19 +88,45 @@ class App extends Component {
           dataLoaded: true,
           gameCards: getRandomDataObjects(12, heros),
         });
+      })
+      .catch((error) => {
+        this.setState({ error });
       });
   }
 
   render() {
+    if (this.state.error) {
+      return (
+        <div className="App">
+          <Header />
+          <div className="App__error">
+            <p>Connection error, please try again refresh page!</p>
+            <p>{this.state.error.message}</p>
+          </div>
+
+          <Footer />
+        </div>
+      );
+    }
     return (
       <div className="App">
         <Header
           currentScore={this.state.currentScore}
           highScore={this.state.highScore}
+          level={this.state.round}
+          gameRunning={this.state.gameRunning}
         />
         {!this.state.dataLoaded && <LoadingSpinner />}
         {this.state.dataLoaded && !this.state.gameRunning && (
-          <button onClick={this.handleNewGame}>Start New Game</button>
+          <div className="App__start-game">
+            <button onClick={this.handleNewGame}>Start New Game</button>
+            <p className="App__star-game__rules">
+              Test your memory. You are presented with multiple card of heros.
+              The cards get shuffled every-time they are clicked. You CAN NOT
+              click on any image more than once or else game is over. Get the
+              highest score as possible.
+            </p>
+          </div>
         )}
         {this.state.gameRunning && (
           <GameBoard
@@ -108,18 +134,13 @@ class App extends Component {
             handleCardClick={this.handleCardClick}
           />
         )}
-        <footer
-          className={
-            this.state.gameRunning ? "foot--relative" : "foot--absolute"
-          }
-        >
-          <p>
-            created by{" "}
-            <a href="https://github.com/mojotron/memory-card">@mojotron</a>
-          </p>
-        </footer>
+        <Footer />
       </div>
     );
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem("memory-card-score", this.state.highScore);
   }
 }
 
