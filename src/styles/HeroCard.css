@@ -39,4 +39,11 @@
     height: 12.6rem;
     width: 7rem;
   }
+  .HeroCard:hover {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  .HeroCard:active {
+    opacity: 0.5;
+  }
 }
