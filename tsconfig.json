@@ -14,8 +14,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
   },
-  "include": ["eslintrc.json", "vite.config.ts", "tailwind.config.js", "src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "eslintrc.json",
+    "vite.config.ts",
+    "tailwind.config.js",
+    "postcss.config.cjs",
+    "src",
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }],
 }
