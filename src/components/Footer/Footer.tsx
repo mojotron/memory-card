@@ -1,13 +1,10 @@
-import React from "react";
-import "../styles/Footer.css";
-
 function Footer() {
   return (
-    <footer className="Footer">
-      <p className="Footer__info">
-        created by{" "}
+    <footer className="w-full mt-auto text-center">
+      <p className="text-red-400">
+        created by{' '}
         <a
-          className="Footer__info__link"
+          className="font-bold hover:text-neutral-200"
           href="https://github.com/mojotron/memory-card"
           target="_blank"
           rel="noopener noreferrer"
