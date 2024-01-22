@@ -3,6 +3,7 @@ import Footer from './components/Footer/Footer';
 import PokemonCard from './components/PokemonCard/PokemonCard';
 import { shuffle } from './utils/shuffleArray';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
+import FlipCard from './components/FlipCard/FlipCard';
 
 function App() {
   const [level, setLevel] = useState(1);
@@ -69,6 +70,8 @@ function App() {
           ))}
         </div>
       )}
+
+      <FlipCard flipped={false} />
 
       <Footer />
     </div>
