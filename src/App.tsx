@@ -4,6 +4,7 @@ import PokemonCard from './components/PokemonCard/PokemonCard';
 import { shuffle } from './utils/shuffleArray';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
 import FlipCard from './components/FlipCard/FlipCard';
+import TiltCard from './components/TiltCard/TiltCard';
 
 function App() {
   const [level, setLevel] = useState(1);
@@ -47,6 +48,11 @@ function App() {
     setCardIds(shuffle(Array.from({ length: 1 }, (_, i) => i + 1)));
   };
 
+  // TEST
+  const [flipped, setFlipped] = useState(false);
+  const handleFlip = () => setFlipped((oldValue) => !oldValue);
+  // ----
+
   return (
     <div className="p-8 flex flex-col w-[100vw] h-[100vh] gap-2 bg-neutral-700 text-neutral-200">
       <ScoreBoard
@@ -71,7 +77,12 @@ function App() {
         </div>
       )}
 
-      <FlipCard flipped={false} />
+      <FlipCard flipped={flipped} />
+      <button type="button" onClick={handleFlip}>
+        Flip
+      </button>
+
+      <TiltCard />
 
       <Footer />
     </div>
