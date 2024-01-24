@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from './components/Footer/Footer';
-import PokemonCard from './components/PokemonCard/PokemonCard';
+import PokemonCard from './components/PokemonCard/PokemonCardFrontFace';
 import { shuffle } from './utils/shuffleArray';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
 import FlipCard from './components/FlipCard/FlipCard';
-import TiltCard from './components/TiltCard/TiltCard';
 
 function App() {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [bestLevel, setBestLevel] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [cardIds, setCardIds] = useState<number[]>(() =>
     shuffle(Array.from({ length: 1 }, (_, i) => i + 1))
@@ -32,6 +32,7 @@ function App() {
         setCardsPlayed([]);
         setBestScore((oldValue) => (oldValue >= score ? oldValue : score + 1));
         setBestLevel((oldValue) => (oldValue >= level ? oldValue : level + 1));
+        setLoading(true);
       } else {
         setCardsPlayed((oldValue) => [...oldValue, id]);
         setCardIds((oldValue) => shuffle(oldValue));
@@ -40,6 +41,17 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (!loading) return;
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [loading]);
+
   const handleStartGame = () => {
     setGameOver(false);
     setScore(0);
@@ -47,11 +59,6 @@ function App() {
     setCardsPlayed([]);
     setCardIds(shuffle(Array.from({ length: 1 }, (_, i) => i + 1)));
   };
-
-  // TEST
-  const [flipped, setFlipped] = useState(false);
-  const handleFlip = () => setFlipped((oldValue) => !oldValue);
-  // ----
 
   return (
     <div className="p-8 flex flex-col w-[100vw] h-[100vh] gap-2 bg-neutral-700 text-neutral-200">
@@ -77,12 +84,11 @@ function App() {
         </div>
       )}
 
-      <FlipCard flipped={flipped} />
-      <button type="button" onClick={handleFlip}>
+      <FlipCard flipped={loading} />
+
+      <button type="button" onClick={() => setLoading((old) => !old)}>
         Flip
       </button>
-
-      <TiltCard />
 
       <Footer />
     </div>

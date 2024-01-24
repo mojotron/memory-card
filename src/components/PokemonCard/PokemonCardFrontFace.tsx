@@ -6,7 +6,7 @@ type PropsType = {
   onPlay: (id: number) => void;
 };
 
-function PokemonCard({ id, onPlay }: PropsType) {
+function PokemonCardFrontFace({ id, onPlay }: PropsType) {
   const boundingRectRef = useRef<DOMRect | null>(null);
 
   const handleOnMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
@@ -36,19 +36,19 @@ function PokemonCard({ id, onPlay }: PropsType) {
   return (
     <div
       onClick={() => onPlay(id)}
-      className="flex flex-col [perspective:1000px] cursor-pointer "
+      className="flex flex-col [perspective:1000px] cursor-pointer"
     >
       <div
         onMouseEnter={handleOnMouseEnter}
         onMouseMove={handleOnMouseMove}
         onMouseLeave={handleOnMouseLeave}
-        className="border-[6px] rounded-md border-yellow-300 group h-[200px] w-[160px] hover:[transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] transition-transform ease-in-out bg-gradient-to-tr from-cyan-700 via-slate-700 to-cyan-700"
+        className="relative border-[6px] rounded-md border-yellow-300 group h-[200px] w-[160px] hover:[transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] transition-all ease-in-out bg-gradient-to-tr from-cyan-700 via-slate-700 to-cyan-700"
       >
-        <div className="relative w-full h-full hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(34,211,238,0.7)_20%,transparent_80%)]">
+        <div className="relative w-full h-full hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(34,211,238,0.7)_10%,transparent_80%)]">
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
             alt="pokemon"
-            className="pointer-event-none absolute inset-0 top-2 transform w-full h-full object-contain hover:translate-y-[-10px] group-hover:translate-x-[-15px] hover:scale-110 transition delay-150 ease-in-out"
+            className="pointer-event-none absolute inset-0 top-2 transform w-full h-full object-contain transition-transform ease-in-out hover:translate-y-[-10px] group-hover:translate-x-[-15px] hover:scale-110 duration-500"
           />
         </div>
       </div>
@@ -56,5 +56,4 @@ function PokemonCard({ id, onPlay }: PropsType) {
   );
 }
 
-export default PokemonCard;
-// bg-gradient-to-tr hover:from-stone-600 hover:via-cyan-400 hover:to-slate-600  from-cyan-700 via-slate-700 to-cyan-700
+export default PokemonCardFrontFace;
