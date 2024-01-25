@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import Footer from './components/Footer/Footer';
-import PokemonCard from './components/PokemonCard/PokemonCardFrontFace';
+import PokemonCard from './components/PokemonCard/PokemonCard';
 import { shuffle } from './utils/shuffleArray';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
-import FlipCard from './components/FlipCard/FlipCard';
 
 function App() {
   const [level, setLevel] = useState(1);
@@ -13,7 +12,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const [cardIds, setCardIds] = useState<number[]>(() =>
-    shuffle(Array.from({ length: 1 }, (_, i) => i + 1))
+    shuffle(Array.from({ length: 4 }, (_, i) => i + 1))
   );
 
   const [gameOver, setGameOver] = useState(false);
@@ -25,19 +24,21 @@ function App() {
     } else {
       const newCardsPlayed = [...cardsPlayed, id];
       if (newCardsPlayed.length === cardIds.length) {
+        setLoading(true);
         setLevel((oldValue) => oldValue + 1);
         setCardIds(
-          shuffle(Array.from({ length: 1 * (level + 1) }, (_, i) => i + 1))
+          shuffle(Array.from({ length: 4 * (level + 1) }, (_, i) => i + 1))
         );
         setCardsPlayed([]);
         setBestScore((oldValue) => (oldValue >= score ? oldValue : score + 1));
         setBestLevel((oldValue) => (oldValue >= level ? oldValue : level + 1));
-        setLoading(true);
       } else {
+        setLoading(true);
         setCardsPlayed((oldValue) => [...oldValue, id]);
         setCardIds((oldValue) => shuffle(oldValue));
       }
       setScore((oldValue) => oldValue + 1);
+      setLoading(true);
     }
   };
 
@@ -45,7 +46,7 @@ function App() {
     if (!loading) return;
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
 
     return () => {
       clearTimeout(timeout);
@@ -57,7 +58,7 @@ function App() {
     setScore(0);
     setLevel(1);
     setCardsPlayed([]);
-    setCardIds(shuffle(Array.from({ length: 1 }, (_, i) => i + 1)));
+    setCardIds(shuffle(Array.from({ length: 4 }, (_, i) => i + 1)));
   };
 
   return (
@@ -79,16 +80,15 @@ function App() {
       ) : (
         <div className="flex gap-2 flex-wrap">
           {cardIds.map((id) => (
-            <PokemonCard key={id} id={id} onPlay={handleClickCard} />
+            <PokemonCard
+              key={id}
+              flipped={loading}
+              pokemonId={id}
+              onCardSelect={handleClickCard}
+            />
           ))}
         </div>
       )}
-
-      <FlipCard flipped={loading} />
-
-      <button type="button" onClick={() => setLoading((old) => !old)}>
-        Flip
-      </button>
 
       <Footer />
     </div>
