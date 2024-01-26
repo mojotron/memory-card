@@ -3,6 +3,7 @@ import Footer from './components/Footer/Footer';
 import PokemonCard from './components/PokemonCard/PokemonCard';
 import { shuffle } from './utils/shuffleArray';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
+import Header from './components/Header/Header';
 
 function App() {
   const [level, setLevel] = useState(1);
@@ -62,7 +63,8 @@ function App() {
   };
 
   return (
-    <div className="p-8 flex flex-col w-[100vw] h-[100vh] gap-2 bg-neutral-700 text-neutral-200">
+    <div className="flex-col w-[100vw] h-[100vh] gap-2 bg-neutral-700 text-neutral-200">
+      <Header />
       <ScoreBoard
         currentScore={score}
         currentLevel={level}

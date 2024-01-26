@@ -1,5 +1,5 @@
 // modern version of fisher-yates algorithm O(n)
-export const shuffle = (array: number[]): number[] => {
+export const shuffle = <Type>(array: Type[]): Type[] => {
   const copy = [...array];
   let endPointer = copy.length - 1;
 

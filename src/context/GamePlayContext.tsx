@@ -26,12 +26,12 @@ const createInitialState = (): State => {
   };
 };
 
-type Actions = { type: 'Temp' };
+type Actions = { type: 'game/start-new' } | { type: 'game/select-card' };
 
 const gameReducer = (state: State, action: Actions) => {
   switch (action.type) {
-    case 'Temp':
-      return { ...state };
+    case 'game/start-new':
+      return createInitialState();
     default:
       return { ...state };
   }
@@ -43,9 +43,9 @@ const useGamePlaySource = () => {
   return { state, dispatch };
 };
 
-const GamePlayContext = createContext<ReturnType<typeof useGamePlaySource>>(
-  {} as unknown as ReturnType<typeof useGamePlaySource>
-);
+export const GamePlayContext = createContext<
+  ReturnType<typeof useGamePlaySource>
+>({} as unknown as ReturnType<typeof useGamePlaySource>);
 
 export function GamePlayContextProvider({ children }: { children: ReactNode }) {
   return (
