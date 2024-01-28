@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="w-full mt-auto text-center">
+    <footer className="w-full absolute bottom-2 text-center">
       <p className="text-red-400">
         created by{' '}
         <a
