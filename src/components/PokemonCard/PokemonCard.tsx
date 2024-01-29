@@ -1,14 +1,15 @@
 // components
+import { PokemonType } from '../../types/pokemonType';
 import PokemonCardBackFace from './PokemonCardBackFace';
 import PokemonCardFrontFace from './PokemonCardFrontFace';
 
 type PropsType = {
   flipped: boolean;
-  pokemonId: number;
+  pokemon: PokemonType;
   onCardSelect: (id: number) => void;
 };
 
-function PokemonCard({ flipped, onCardSelect, pokemonId }: PropsType) {
+function PokemonCard({ flipped, onCardSelect, pokemon }: PropsType) {
   return (
     <div className="group h-[200px] w-[160px] [perspective:1000px]">
       <div
@@ -18,7 +19,7 @@ function PokemonCard({ flipped, onCardSelect, pokemonId }: PropsType) {
         }}
       >
         <div className="absolute inset-0 h-full w-full">
-          <PokemonCardFrontFace onPlay={onCardSelect} id={pokemonId} />
+          <PokemonCardFrontFace onPlay={onCardSelect} pokemon={pokemon} />
         </div>
         <div className="absolute inset-0 h-full w-full [transform:rotateY(180deg)] [backface-visibility:hidden]">
           <PokemonCardBackFace />

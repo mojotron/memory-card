@@ -1,46 +1,67 @@
 import { ReactNode, createContext, useReducer } from 'react';
+import { getRandomItemsFromArray } from '../utils/getRandomItemsFromArray';
+import pokemonData from '../data/pokemon.json';
+import type { PokemonType } from '../types/pokemonType';
+
+const CARDS_PER_LEVEL = 4;
 
 type State = {
   // current game
   running: boolean;
   currentScore: number;
   currentLevel: number;
-  gameCards: number[];
-  playedCards: number[];
+  gameCards: PokemonType[];
+  playedCards: PokemonType[];
   gameOver: boolean;
   // best score from current client
   bestScore: number;
   bestLevel: number;
 };
 
-const createInitialState = (): State => {
-  return {
-    running: false,
-    currentScore: 0,
-    currentLevel: 0,
-    bestScore: 0,
-    bestLevel: 0,
-    gameCards: [],
-    playedCards: [],
-    gameOver: false,
-  };
-};
+type Actions = { type: 'game/start-new' } | { type: 'game/play-turn' };
 
-type Actions = { type: 'game/start-new' } | { type: 'game/select-card' };
+const createPokemonCardDeck = (size: number) => {
+  return getRandomItemsFromArray(size, pokemonData);
+};
 
 const gameReducer = (state: State, action: Actions) => {
   switch (action.type) {
     case 'game/start-new':
-      return createInitialState();
+      return {
+        ...state,
+        running: true,
+        currentScore: 0,
+        currentLevel: 1,
+        gameCards: createPokemonCardDeck(state.currentLevel * CARDS_PER_LEVEL),
+      };
+    case 'game/play-turn':
+      return { ...state };
     default:
       return { ...state };
   }
 };
 
-const useGamePlaySource = () => {
-  const [state, dispatch] = useReducer(gameReducer, createInitialState());
+const useGamePlaySource = (): {
+  running: boolean;
+  gameCards: PokemonType[];
+  startGame: () => void;
+} => {
+  const [{ running, gameCards }, dispatch] = useReducer(gameReducer, {
+    running: false,
+    currentScore: 0,
+    currentLevel: 1,
+    bestScore: 0,
+    bestLevel: 0,
+    gameCards: [],
+    playedCards: [],
+    gameOver: false,
+  });
 
-  return { state, dispatch };
+  const startGame = () => {
+    dispatch({ type: 'game/start-new' });
+  };
+
+  return { running, gameCards, startGame };
 };
 
 export const GamePlayContext = createContext<
@@ -54,16 +75,6 @@ export function GamePlayContextProvider({ children }: { children: ReactNode }) {
     </GamePlayContext.Provider>
   );
 }
-
-// const [level, setLevel] = useState(1);
-//   const [score, setScore] = useState(0);
-//   const [bestScore, setBestScore] = useState(0);
-//   const [bestLevel, setBestLevel] = useState(1);
-//   const [loading, setLoading] = useState(false);
-
-//   const [cardIds, setCardIds] = useState<number[]>(() =>
-//     shuffle(Array.from({ length: 4 }, (_, i) => i + 1))
-//   );
 
 //   const [gameOver, setGameOver] = useState(false);
 //   const [cardsPlayed, setCardsPlayed] = useState<number[]>([]);

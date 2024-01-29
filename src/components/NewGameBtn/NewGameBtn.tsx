@@ -1,8 +1,11 @@
-import React from 'react';
+import { useGamePlayContext } from '../../hooks/useGameContext';
 
 function NewGameBtn() {
+  const { startGame } = useGamePlayContext();
+
   return (
     <button
+      onClick={startGame}
       type="button"
       className="relative inline-flex items-center justify-center p-0.5 bg-gradient-to-br from-red-500 to-neutral-100 rounded-lg group hover:text-neutral-700 font-bold"
     >

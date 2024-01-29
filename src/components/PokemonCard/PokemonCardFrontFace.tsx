@@ -1,12 +1,13 @@
 /* eslint-disable react/self-closing-comp */
 import { MouseEvent, useRef } from 'react';
+import { PokemonType } from '../../types/pokemonType';
 
 type PropsType = {
-  id: number;
+  pokemon: PokemonType;
   onPlay: (id: number) => void;
 };
 
-function PokemonCardFrontFace({ id, onPlay }: PropsType) {
+function PokemonCardFrontFace({ pokemon, onPlay }: PropsType) {
   const boundingRectRef = useRef<DOMRect | null>(null);
 
   const handleOnMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
@@ -35,8 +36,8 @@ function PokemonCardFrontFace({ id, onPlay }: PropsType) {
 
   return (
     <div
-      onClick={() => onPlay(id)}
-      className="flex flex-col [perspective:1000px] cursor-pointer"
+      onClick={() => onPlay(pokemon.id)}
+      className="flex flex-col [perspective:1000px] cursor-pointer select-none"
     >
       <div
         onMouseEnter={handleOnMouseEnter}
@@ -46,8 +47,9 @@ function PokemonCardFrontFace({ id, onPlay }: PropsType) {
       >
         <div className="relative w-full h-full hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(34,211,238,0.7)_10%,transparent_80%)]">
           <img
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`}
-            alt="pokemon"
+            draggable="false"
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+            alt={`${pokemon.name}`}
             className="pointer-event-none absolute inset-0 top-2 transform w-full h-full object-contain transition-transform ease-in-out hover:translate-y-[-10px] group-hover:translate-x-[-15px] hover:scale-110 duration-500"
           />
         </div>
