@@ -6,7 +6,7 @@ import PokemonCardFrontFace from './PokemonCardFrontFace';
 type PropsType = {
   flipped: boolean;
   pokemon: PokemonType;
-  onCardSelect: (id: number) => void;
+  onCardSelect: (pokemon: PokemonType) => void;
 };
 
 function PokemonCard({ flipped, onCardSelect, pokemon }: PropsType) {
@@ -18,7 +18,11 @@ function PokemonCard({ flipped, onCardSelect, pokemon }: PropsType) {
           transform: !flipped ? '' : 'rotateY(180deg)',
         }}
       >
-        <div className="absolute inset-0 h-full w-full">
+        <div
+          className="absolute inset-0 h-full w-full"
+          // hide card because of image effect of pokemon coming out, without this you can see which pokemon is
+          style={{ visibility: flipped ? 'hidden' : 'visible' }}
+        >
           <PokemonCardFrontFace onPlay={onCardSelect} pokemon={pokemon} />
         </div>
         <div className="absolute inset-0 h-full w-full [transform:rotateY(180deg)] [backface-visibility:hidden]">

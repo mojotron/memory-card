@@ -2,11 +2,7 @@ import { useGamePlayContext } from '../../hooks/useGameContext';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
 function Gameboard() {
-  const { gameCards } = useGamePlayContext();
-
-  const loading = false;
-
-  console.log(gameCards);
+  const { gameCards, loading, playTurn } = useGamePlayContext();
 
   return (
     <ul className="grid grid-cols-4 gap-3">
@@ -14,7 +10,7 @@ function Gameboard() {
         <PokemonCard
           key={card.id}
           pokemon={card}
-          onCardSelect={() => {}}
+          onCardSelect={playTurn}
           flipped={loading}
         />
       ))}
