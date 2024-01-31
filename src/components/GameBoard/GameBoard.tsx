@@ -1,7 +1,7 @@
 import { useGamePlayContext } from '../../hooks/useGameContext';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
-function Gameboard() {
+function GameBoard() {
   const { gameCards, loading, playTurn } = useGamePlayContext();
 
   return (
@@ -18,4 +18,4 @@ function Gameboard() {
   );
 }
 
-export default Gameboard;
+export default GameBoard;

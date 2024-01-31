@@ -20,7 +20,8 @@ function PokemonCard({ flipped, onCardSelect, pokemon }: PropsType) {
       >
         <div
           className="absolute inset-0 h-full w-full"
-          // hide card because of image effect of pokemon coming out, without this you can see which pokemon is
+          // hide card because of image effect of pokemon "coming out",
+          // without this you can see part of pokemon if mouse stay on the card
           style={{ visibility: flipped ? 'hidden' : 'visible' }}
         >
           <PokemonCardFrontFace onPlay={onCardSelect} pokemon={pokemon} />

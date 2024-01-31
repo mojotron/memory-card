@@ -4,7 +4,7 @@ import pokemonData from '../data/pokemon.json';
 import type { PokemonType } from '../types/pokemonType';
 import { shuffle } from '../utils/shuffleArray';
 
-const CARDS_PER_LEVEL = 4;
+const CARDS_PER_LEVEL = 1;
 
 type State = {
   // current game
@@ -45,14 +45,17 @@ const gameReducer = (state: State, action: Actions) => {
         running: true,
         currentScore: 0,
         currentLevel: 1,
-        gameCards: createPokemonCardDeck(state.currentLevel * CARDS_PER_LEVEL),
+        gameCards: createPokemonCardDeck(1 * CARDS_PER_LEVEL),
+        playedCards: [],
         loading: true,
+        gameOver: false,
       };
     case 'game/play-turn':
       return {
         ...state,
         playedCards: [...state.playedCards, action.payload],
         loading: true,
+        currentScore: state.currentScore + 1,
       };
     case 'game/finish-loading':
       return {
@@ -65,13 +68,30 @@ const gameReducer = (state: State, action: Actions) => {
         gameCards: reShuffle(state.gameCards),
       };
     case 'game/over-lost':
-      return { ...state, running: false, gameOver: true, loading: false };
+      return {
+        ...state,
+        running: false,
+        gameOver: true,
+        loading: false,
+        bestScore:
+          state.currentScore > state.bestScore
+            ? state.currentScore
+            : state.bestScore,
+        bestLevel:
+          state.currentLevel > state.bestLevel
+            ? state.currentLevel
+            : state.bestLevel,
+      };
     case 'game/new-level':
       return {
         ...state,
         gameCards: createPokemonCardDeck(
           (state.currentLevel + 1) * CARDS_PER_LEVEL
         ),
+        playedCards: [],
+        currentLevel: state.currentLevel + 1,
+        currentScore: state.currentScore + 1,
+        loading: true,
       };
     default:
       return { ...state };
@@ -83,21 +103,37 @@ const useGamePlaySource = (): {
   loading: boolean;
   gameOver: boolean;
   gameCards: PokemonType[];
+  currentScore: number;
+  bestScore: number;
+  currentLevel: number;
+  bestLevel: number;
   startGame: () => void;
   playTurn: (pokemon: PokemonType) => void;
 } => {
-  const [{ running, gameCards, loading, playedCards, gameOver }, dispatch] =
-    useReducer(gameReducer, {
-      running: false,
-      currentScore: 0,
-      currentLevel: 1,
-      bestScore: 0,
-      bestLevel: 0,
-      gameCards: [],
-      playedCards: [],
-      gameOver: false,
-      loading: false,
-    });
+  const [
+    {
+      running,
+      gameCards,
+      loading,
+      playedCards,
+      gameOver,
+      currentScore,
+      currentLevel,
+      bestScore,
+      bestLevel,
+    },
+    dispatch,
+  ] = useReducer(gameReducer, {
+    running: false,
+    currentScore: 0,
+    currentLevel: 1,
+    bestScore: 0,
+    bestLevel: 1,
+    gameCards: [],
+    playedCards: [],
+    gameOver: false,
+    loading: false,
+  });
 
   const startGame = () => {
     dispatch({ type: 'game/start-new' });
@@ -112,7 +148,9 @@ const useGamePlaySource = (): {
     }
     // TODO check if level is cleared
     if (playedCards.length + 1 === gameCards.length) {
-      console.log('LEVEL CLEARD');
+      dispatch({ type: 'game/new-level' });
+
+      return;
     }
 
     dispatch({ type: 'game/play-turn', payload: pokemon });
@@ -136,7 +174,18 @@ const useGamePlaySource = (): {
     return () => clearTimeout(timer);
   }, [loading, running]);
 
-  return { running, gameCards, loading, gameOver, startGame, playTurn };
+  return {
+    running,
+    gameCards,
+    loading,
+    gameOver,
+    currentScore,
+    currentLevel,
+    bestScore,
+    bestLevel,
+    startGame,
+    playTurn,
+  };
 };
 
 export const GamePlayContext = createContext<
@@ -150,46 +199,3 @@ export function GamePlayContextProvider({ children }: { children: ReactNode }) {
     </GamePlayContext.Provider>
   );
 }
-
-//   const handleClickCard = (id: number) => {
-//     if (cardsPlayed.includes(id)) {
-//       setGameOver(true);
-//     } else {
-//       const newCardsPlayed = [...cardsPlayed, id];
-//       if (newCardsPlayed.length === cardIds.length) {
-//         setLoading(true);
-//         setLevel((oldValue) => oldValue + 1);
-//         setCardIds(
-//           shuffle(Array.from({ length: 4 * (level + 1) }, (_, i) => i + 1))
-//         );
-//         setCardsPlayed([]);
-//         setBestScore((oldValue) => (oldValue >= score ? oldValue : score + 1));
-//         setBestLevel((oldValue) => (oldValue >= level ? oldValue : level + 1));
-//       } else {
-//         setLoading(true);
-//         setCardsPlayed((oldValue) => [...oldValue, id]);
-//         setCardIds((oldValue) => shuffle(oldValue));
-//       }
-//       setScore((oldValue) => oldValue + 1);
-//       setLoading(true);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (!loading) return;
-//     const timeout = setTimeout(() => {
-//       setLoading(false);
-//     }, 500);
-
-//     return () => {
-//       clearTimeout(timeout);
-//     };
-//   }, [loading]);
-
-//   const handleStartGame = () => {
-//     setGameOver(false);
-//     setScore(0);
-//     setLevel(1);
-//     setCardsPlayed([]);
-//     setCardIds(shuffle(Array.from({ length: 4 }, (_, i) => i + 1)));
-//   };
