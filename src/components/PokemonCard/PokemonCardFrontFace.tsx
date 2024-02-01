@@ -43,7 +43,7 @@ function PokemonCardFrontFace({ pokemon, onPlay }: PropsType) {
         onMouseEnter={handleOnMouseEnter}
         onMouseMove={handleOnMouseMove}
         onMouseLeave={handleOnMouseLeave}
-        className="relative border-[6px] rounded-md border-yellow-300 group h-full w-full hover:[transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] transition-all ease-in-out bg-gradient-to-tr from-cyan-700 via-slate-700 to-cyan-700"
+        className="relative border-[4px] rounded-md border-yellow-300 group h-full w-full hover:[transform:rotateX(var(--x-rotation))_rotateY(var(--y-rotation))] transition-all ease-in-out bg-gradient-to-tr from-cyan-700 via-slate-700 to-cyan-700"
       >
         <div className="relative w-full h-full hover:bg-[radial-gradient(at_var(--x)_var(--y),rgba(34,211,238,0.7)_10%,transparent_80%)]">
           <img

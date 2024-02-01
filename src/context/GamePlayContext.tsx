@@ -4,7 +4,7 @@ import pokemonData from '../data/pokemon.json';
 import type { PokemonType } from '../types/pokemonType';
 import { shuffle } from '../utils/shuffleArray';
 
-const CARDS_PER_LEVEL = 1;
+const CARDS_PER_LEVEL = 4;
 
 type State = {
   // current game
@@ -15,6 +15,7 @@ type State = {
   playedCards: PokemonType[];
   gameOver: boolean;
   loading: boolean;
+  lastPlayedPokemon: PokemonType | null;
   // best score from current client
   bestScore: number;
   bestLevel: number;
@@ -25,7 +26,7 @@ type Actions =
   | { type: 'game/play-turn'; payload: PokemonType }
   | { type: 'game/finish-loading' }
   | { type: 'game/shuffle' }
-  | { type: 'game/over-lost' }
+  | { type: 'game/over-lost'; payload: PokemonType }
   | { type: 'game/new-level' };
 // TODO finish game
 
@@ -49,6 +50,7 @@ const gameReducer = (state: State, action: Actions) => {
         playedCards: [],
         loading: true,
         gameOver: false,
+        lastPlayedPokemon: null,
       };
     case 'game/play-turn':
       return {
@@ -70,6 +72,7 @@ const gameReducer = (state: State, action: Actions) => {
     case 'game/over-lost':
       return {
         ...state,
+        lastPlayedPokemon: action.payload,
         running: false,
         gameOver: true,
         loading: false,
@@ -107,6 +110,7 @@ const useGamePlaySource = (): {
   bestScore: number;
   currentLevel: number;
   bestLevel: number;
+  lastPlayedPokemon: null | PokemonType;
   startGame: () => void;
   playTurn: (pokemon: PokemonType) => void;
 } => {
@@ -121,6 +125,7 @@ const useGamePlaySource = (): {
       currentLevel,
       bestScore,
       bestLevel,
+      lastPlayedPokemon,
     },
     dispatch,
   ] = useReducer(gameReducer, {
@@ -133,6 +138,7 @@ const useGamePlaySource = (): {
     playedCards: [],
     gameOver: false,
     loading: false,
+    lastPlayedPokemon: null,
   });
 
   const startGame = () => {
@@ -143,7 +149,7 @@ const useGamePlaySource = (): {
     // check if game is over
     const cardAlreadyPlayed = playedCards.find((p) => p.id === pokemon.id);
     if (cardAlreadyPlayed) {
-      dispatch({ type: 'game/over-lost' });
+      dispatch({ type: 'game/over-lost', payload: pokemon });
       return;
     }
     // TODO check if level is cleared
@@ -183,6 +189,7 @@ const useGamePlaySource = (): {
     currentLevel,
     bestScore,
     bestLevel,
+    lastPlayedPokemon,
     startGame,
     playTurn,
   };
