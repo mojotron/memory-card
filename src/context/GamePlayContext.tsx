@@ -3,8 +3,14 @@ import { getRandomItemsFromArray } from '../utils/getRandomItemsFromArray';
 import pokemonData from '../data/pokemon.json';
 import type { PokemonType } from '../types/pokemonType';
 import { shuffle } from '../utils/shuffleArray';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const CARDS_PER_LEVEL = 4;
+
+type StoredDataType = {
+  bestScore: number;
+  bestLevel: number;
+};
 
 type State = {
   // current game
@@ -16,6 +22,7 @@ type State = {
   gameOver: boolean;
   loading: boolean;
   lastPlayedPokemon: PokemonType | null;
+  newHighScore: boolean;
   // best score from current client
   bestScore: number;
   bestLevel: number;
@@ -26,7 +33,10 @@ type Actions =
   | { type: 'game/play-turn'; payload: PokemonType }
   | { type: 'game/finish-loading' }
   | { type: 'game/shuffle' }
-  | { type: 'game/over-lost'; payload: PokemonType }
+  | {
+      type: 'game/over-lost';
+      payload: { pokemon: PokemonType; newHighScore: boolean };
+    }
   | { type: 'game/new-level' };
 // TODO finish game
 
@@ -51,6 +61,7 @@ const gameReducer = (state: State, action: Actions) => {
         loading: true,
         gameOver: false,
         lastPlayedPokemon: null,
+        newHighScore: false,
       };
     case 'game/play-turn':
       return {
@@ -72,7 +83,8 @@ const gameReducer = (state: State, action: Actions) => {
     case 'game/over-lost':
       return {
         ...state,
-        lastPlayedPokemon: action.payload,
+        lastPlayedPokemon: action.payload.pokemon,
+        newHighScore: action.payload.newHighScore,
         running: false,
         gameOver: true,
         loading: false,
@@ -111,9 +123,11 @@ const useGamePlaySource = (): {
   currentLevel: number;
   bestLevel: number;
   lastPlayedPokemon: null | PokemonType;
+  newHighScore: boolean;
   startGame: () => void;
   playTurn: (pokemon: PokemonType) => void;
 } => {
+  const { read, write } = useLocalStorage<StoredDataType>('pokemon-best-sore');
   const [
     {
       running,
@@ -126,19 +140,21 @@ const useGamePlaySource = (): {
       bestScore,
       bestLevel,
       lastPlayedPokemon,
+      newHighScore,
     },
     dispatch,
   ] = useReducer(gameReducer, {
     running: false,
     currentScore: 0,
     currentLevel: 1,
-    bestScore: 0,
-    bestLevel: 1,
+    bestScore: read()?.bestScore || 0,
+    bestLevel: read()?.bestLevel || 1,
     gameCards: [],
     playedCards: [],
     gameOver: false,
     loading: false,
     lastPlayedPokemon: null,
+    newHighScore: false,
   });
 
   const startGame = () => {
@@ -149,7 +165,14 @@ const useGamePlaySource = (): {
     // check if game is over
     const cardAlreadyPlayed = playedCards.find((p) => p.id === pokemon.id);
     if (cardAlreadyPlayed) {
-      dispatch({ type: 'game/over-lost', payload: pokemon });
+      const isHighScore = currentScore > bestScore;
+      dispatch({
+        type: 'game/over-lost',
+        payload: { pokemon, newHighScore: isHighScore },
+      });
+      if (isHighScore) {
+        write({ bestScore: currentScore, bestLevel: currentLevel });
+      }
       return;
     }
     // TODO check if level is cleared
@@ -190,6 +213,7 @@ const useGamePlaySource = (): {
     bestScore,
     bestLevel,
     lastPlayedPokemon,
+    newHighScore,
     startGame,
     playTurn,
   };

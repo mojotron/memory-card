@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 type OptionsType = {
-  maxWidth: number; // px
+  maxWidth?: number; // px
   colorStart: string; // css color
   colorEnd: string; // css color
 };

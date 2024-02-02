@@ -1,8 +1,25 @@
 import { ReactNode } from 'react';
 
-function HighlightTextWrapper({ children }: { children: ReactNode }) {
+type OptionsType = {
+  colorStart: string; // css color
+  colorEnd: string; // css color
+};
+
+type PropsType = {
+  children: ReactNode;
+  options?: undefined | OptionsType;
+};
+
+function HighlightTextWrapper({ children, options = undefined }: PropsType) {
   return (
-    <div className="text-transparent bg-gradient-to-tr from-cyan-500 to-emerald-200 [background-clip:text] font-rubik uppercase">
+    <div
+      className="font-rubik uppercase"
+      style={{
+        color: 'transparent',
+        background: `linear-gradient(45deg, ${options?.colorStart || '#06b6d4'}, ${options?.colorEnd || '#10b981'})`,
+        backgroundClip: 'text',
+      }}
+    >
       {children}
     </div>
   );
