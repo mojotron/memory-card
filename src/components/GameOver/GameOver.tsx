@@ -9,7 +9,7 @@ function GameOver() {
 
   return (
     <div className="rounded-md w-full p-8 bg-neutral-600  flex flex-col justify-center items-center gap-8">
-      <div className="flex flex-col gap-4 justify-center items-center">
+      <div className="flex flex-col gap-4 justify-center items-center text-center">
         <HighlightTextWrapper
           options={{ colorStart: '#be123c', colorEnd: '#f472b6' }}
         >

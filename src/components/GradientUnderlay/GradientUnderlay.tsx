@@ -14,7 +14,7 @@ type PropsType = {
 function GradientUnderlay({ children, options = undefined }: PropsType) {
   return (
     <div
-      className="rounded-md p-1 w-full max-w-[500px]"
+      className="rounded-md p-1 w-full"
       style={{
         background: `linear-gradient(45deg, ${options?.colorStart || '#06b6d4'}, ${options?.colorEnd || '#10b981'})`,
         maxWidth: options?.maxWidth || '500px',

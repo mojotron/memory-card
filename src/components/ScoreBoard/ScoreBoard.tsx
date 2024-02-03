@@ -5,7 +5,7 @@ function ScoreBoard() {
     useGamePlayContext();
 
   return (
-    <div className="relative w-[200px] ">
+    <div className="relative w-[200px]">
       <div className="flex justify-center gap-8 z-0 font-bold bg-transparent py-1 text-cyan-400">
         <span>Score</span>
         <span>Level</span>

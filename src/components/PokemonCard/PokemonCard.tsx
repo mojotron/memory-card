@@ -11,7 +11,7 @@ type PropsType = {
 
 function PokemonCard({ flipped, onCardSelect, pokemon }: PropsType) {
   return (
-    <div className="group h-[200px] w-[160px] [perspective:1000px]">
+    <div className="group h-[90px] w-[72px] sm:h-[120px] sm:w-[96px] md:h-[160px] md:w-[128px] lg:h-[200px] lg:w-[160px] [perspective:1000px]">
       <div
         className="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d]"
         style={{

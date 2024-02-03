@@ -5,29 +5,37 @@ import GameBoard from './components/GameBoard/GameBoard';
 import GameOver from './components/GameOver/GameOver';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
 import GradientUnderlay from './components/GradientUnderlay/GradientUnderlay';
+import GameFinished from './components/GameFinished/GameFinished';
 
 function App() {
-  const { running, gameOver } = useGamePlayContext();
+  const { running, gameOver, gameFinished } = useGamePlayContext();
 
   return (
-    <div className="relative pb-16 flex flex-col gap-10 items-center justify-center w-[100vw] min-h-[100vh] bg-neutral-700 text-neutral-200">
-      {gameOver && !running && (
+    <div className="relative p-5 flex flex-col gap-10 justify-center items-center w-[100vw] min-h-[100vh] bg-neutral-700 text-neutral-200">
+      {gameOver && !running && !gameFinished && (
         <GradientUnderlay
           options={{ colorStart: '#be123c', colorEnd: '#f472b6' }}
         >
           <GameOver />
         </GradientUnderlay>
       )}
-      {!gameOver && !running && (
+      {!gameOver && !running && !gameFinished && (
         <GradientUnderlay>
           <Dashboard />
         </GradientUnderlay>
       )}
-      {!gameOver && running && (
+      {!gameOver && running && !gameFinished && (
         <>
           <ScoreBoard />
           <GameBoard />
         </>
+      )}
+      {gameFinished && (
+        <GradientUnderlay
+          options={{ colorStart: '#fbbf24', colorEnd: '#ca8a04' }}
+        >
+          <GameFinished />
+        </GradientUnderlay>
       )}
 
       <Footer />

@@ -5,7 +5,7 @@ function GameBoard() {
   const { gameCards, loading, playTurn } = useGamePlayContext();
 
   return (
-    <ul className="grid grid-cols-4 gap-3">
+    <ul className="grid grid-cols-4 gap-3 grow">
       {gameCards.map((card) => (
         <PokemonCard
           key={card.id}

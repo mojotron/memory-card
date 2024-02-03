@@ -50,7 +50,7 @@ function PokemonCardFrontFace({ pokemon, onPlay }: PropsType) {
             draggable="false"
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
             alt={`${pokemon.name}`}
-            className="pointer-event-none absolute inset-0 top-2 transform w-full h-full object-contain transition-transform ease-in-out hover:translate-y-[-10px] group-hover:translate-x-[-15px] hover:scale-110 duration-500"
+            className="pointer-event-none absolute inset-0 top-2 transform w-full h-full object-contain transition-transform ease-in-out hover:translate-y-[-10%] group-hover:translate-x-[-7%] hover:scale-110 duration-500"
           />
         </div>
       </div>

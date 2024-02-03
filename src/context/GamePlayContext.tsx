@@ -1,9 +1,16 @@
 import { ReactNode, createContext, useEffect, useReducer } from 'react';
 import { getRandomItemsFromArray } from '../utils/getRandomItemsFromArray';
-import pokemonData from '../data/pokemon.json';
+// import pokemonData from '../data/pokemon.json';
 import type { PokemonType } from '../types/pokemonType';
 import { shuffle } from '../utils/shuffleArray';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+
+const pokemonData = [
+  { id: 1, name: 'Bulbasaur' },
+  { id: 2, name: 'Ivysaur' },
+  { id: 3, name: 'Venusaur' },
+  { id: 4, name: 'Charmander' },
+];
 
 const CARDS_PER_LEVEL = 4;
 
@@ -23,6 +30,7 @@ type State = {
   loading: boolean;
   lastPlayedPokemon: PokemonType | null;
   newHighScore: boolean;
+  gameFinished: boolean;
   // best score from current client
   bestScore: number;
   bestLevel: number;
@@ -37,8 +45,8 @@ type Actions =
       type: 'game/over-lost';
       payload: { pokemon: PokemonType; newHighScore: boolean };
     }
-  | { type: 'game/new-level' };
-// TODO finish game
+  | { type: 'game/new-level' }
+  | { type: 'game/finished' };
 
 const createPokemonCardDeck = (size: number) => {
   return getRandomItemsFromArray(size, pokemonData);
@@ -62,6 +70,7 @@ const gameReducer = (state: State, action: Actions) => {
         gameOver: false,
         lastPlayedPokemon: null,
         newHighScore: false,
+        gameFinished: false,
       };
     case 'game/play-turn':
       return {
@@ -108,6 +117,8 @@ const gameReducer = (state: State, action: Actions) => {
         currentScore: state.currentScore + 1,
         loading: true,
       };
+    case 'game/finished':
+      return { ...state, gameFinished: true };
     default:
       return { ...state };
   }
@@ -124,6 +135,7 @@ const useGamePlaySource = (): {
   bestLevel: number;
   lastPlayedPokemon: null | PokemonType;
   newHighScore: boolean;
+  gameFinished: boolean;
   startGame: () => void;
   playTurn: (pokemon: PokemonType) => void;
 } => {
@@ -141,6 +153,7 @@ const useGamePlaySource = (): {
       bestLevel,
       lastPlayedPokemon,
       newHighScore,
+      gameFinished,
     },
     dispatch,
   ] = useReducer(gameReducer, {
@@ -155,6 +168,7 @@ const useGamePlaySource = (): {
     loading: false,
     lastPlayedPokemon: null,
     newHighScore: false,
+    gameFinished: false,
   });
 
   const startGame = () => {
@@ -175,10 +189,14 @@ const useGamePlaySource = (): {
       }
       return;
     }
-    // TODO check if level is cleared
+    // check if user found all pokemon
+    if (playedCards.length + 1 === pokemonData.length) {
+      dispatch({ type: 'game/finished' });
+      return;
+    }
+    // check if level is cleared
     if (playedCards.length + 1 === gameCards.length) {
       dispatch({ type: 'game/new-level' });
-
       return;
     }
 
@@ -187,10 +205,6 @@ const useGamePlaySource = (): {
     setTimeout(() => {
       dispatch({ type: 'game/shuffle' });
     }, 800);
-
-    // setTimeout(() => {
-    //   dispatch({ type: 'game/finish-loading' });
-    // }, 1000);
   };
 
   useEffect(() => {
@@ -214,6 +228,7 @@ const useGamePlaySource = (): {
     bestLevel,
     lastPlayedPokemon,
     newHighScore,
+    gameFinished,
     startGame,
     playTurn,
   };

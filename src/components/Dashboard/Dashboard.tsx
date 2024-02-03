@@ -9,7 +9,7 @@ function Dashboard() {
   const [showRules, setShowRules] = useState(false);
 
   return (
-    <section className="shadow-lg bg-neutral-700 rounded-md py-8 relative min-w-[350px] flex flex-col items-center">
+    <section className="text-center shadow-lg bg-neutral-700 rounded-md py-8 relative w-full max-w-[500px] flex flex-col items-center">
       <RulesBtn onToggleShow={() => setShowRules((oldValue) => !oldValue)} />
       {showRules && <GameRules />}
       <Header />

@@ -2,13 +2,11 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    // colors: {
-    //   blue: '',
-    //   green: '',
-    //   red: '',
-    //   'gray-bg': '',
-    //   'gray-text': '',
-    // },
+    screens: {
+      sm: '450px',
+      md: '600px',
+      lg: '800px',
+    },
     fontFamily: {
       inter: ['Inter', 'sans-serif'],
       rubik: ['Rubik Doodle Shadow', 'monospaced', 'sans'],
