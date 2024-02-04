@@ -4,7 +4,6 @@ import Footer from './components/Footer/Footer';
 import GameBoard from './components/GameBoard/GameBoard';
 import GameOver from './components/GameOver/GameOver';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
-import GradientUnderlay from './components/GradientUnderlay/GradientUnderlay';
 import GameFinished from './components/GameFinished/GameFinished';
 
 function App() {
@@ -12,31 +11,15 @@ function App() {
 
   return (
     <div className="relative p-5 flex flex-col gap-10 justify-center items-center w-[100vw] min-h-[100vh] bg-neutral-700 text-neutral-200">
-      {gameOver && !running && !gameFinished && (
-        <GradientUnderlay
-          options={{ colorStart: '#be123c', colorEnd: '#f472b6' }}
-        >
-          <GameOver />
-        </GradientUnderlay>
-      )}
-      {!gameOver && !running && !gameFinished && (
-        <GradientUnderlay>
-          <Dashboard />
-        </GradientUnderlay>
-      )}
+      {gameOver && !running && !gameFinished && <GameOver />}
+      {!gameOver && !running && !gameFinished && <Dashboard />}
       {!gameOver && running && !gameFinished && (
         <>
           <ScoreBoard />
           <GameBoard />
         </>
       )}
-      {gameFinished && (
-        <GradientUnderlay
-          options={{ colorStart: '#fbbf24', colorEnd: '#ca8a04' }}
-        >
-          <GameFinished />
-        </GradientUnderlay>
-      )}
+      {gameFinished && <GameFinished />}
 
       <Footer />
     </div>

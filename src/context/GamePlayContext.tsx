@@ -1,16 +1,9 @@
 import { ReactNode, createContext, useEffect, useReducer } from 'react';
 import { getRandomItemsFromArray } from '../utils/getRandomItemsFromArray';
-// import pokemonData from '../data/pokemon.json';
+import pokemonData from '../data/pokemon.json';
 import type { PokemonType } from '../types/pokemonType';
 import { shuffle } from '../utils/shuffleArray';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-
-const pokemonData = [
-  { id: 1, name: 'Bulbasaur' },
-  { id: 2, name: 'Ivysaur' },
-  { id: 3, name: 'Venusaur' },
-  { id: 4, name: 'Charmander' },
-];
 
 const CARDS_PER_LEVEL = 4;
 
